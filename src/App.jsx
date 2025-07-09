@@ -1,35 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Login from "./components/Auth/Login";
 import EmployeeDashboard from "./components/Dashboard/EmployeeDashboard";
 import AdminDashboard from "./components/Dashboard/AdminDashboard";
 import { getLocalStorage, setLocalStorage } from "./utils/LocalStorage";
+import { AuthContext } from "./context/AuthProvider";
 
 const App = () => {
   const [user, setUser] = useState(null);
+  const [loggedInUserData, setloggedInUserData] = useState(null);
+  const authData = useContext(AuthContext);
+
+  useEffect(()=>{
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    console.log(loggedInUser)
+  })
+
   const handleLogin = (email, password) => {
-    if (email == "admin@me.com" && password == "123") {
-      console.log("This is admin");
-    } else if (email == "user@me.com" && password == "123") {
-      console.log("This is user");
-    } 
-    else {
+    if (email === "admin@me.com" && password === "123") {
+      setUser({ role: "admin" });
+      localStorage.setItem("loggedInUser", JSON.stringify({ role: "admin" }));
+    } else if (authData) {
+      const employee = authData.employees.find(
+        (e) => e.email === email && e.password === password
+      );
+      if (employee) {
+        setUser({ role: "employee" });
+        setloggedInUserData(employee);
+        localStorage.setItem(
+          "loggedInUser",
+          JSON.stringify({ role: "employee" })
+        );
+      }
+    } else {
       alert("Invalid credentials, please try again.");
     }
   };
-  handleLogin("user@me.com", 123);
-  // Example usage (remove or adjust as needed)
-  // handleLogin('admin@me.com', '123')
-
-  // useEffect(() => {
-  //   // setLocalStorage()
-  //   getLocalStorage()
-  // },[])
-
   return (
     <>
-      {!user ? <Login handleLogin={handleLogin} /> : ""}
-      {/* {<EmployeeDashboard/>} */}
-      {/* <AdminDashboard/> */}
+      {!user && <Login handleLogin={handleLogin} />}
+      {user && user.role === "admin" ? (
+        <AdminDashboard />
+      ) : user && user.role === "employee" ? (
+        <EmployeeDashboard data={loggedInUserData} />
+      ) : null}
     </>
   );
 };

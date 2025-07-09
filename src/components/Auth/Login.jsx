@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 
-const Login = () => {
-    const [email, setemail] = useState('')
-    const [password, setpassword] = useState('')
+const Login = ({ handleLogin }) => {
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
+    handleLogin(email, password);
+   
 
-    setemail('');
-    setpassword('');
+    setemail("");
+    setpassword("");
   };
 
   return (
@@ -24,7 +24,7 @@ const Login = () => {
           <input
             value={email}
             onChange={(e) => {
-                setemail(e.target.value);
+              setemail(e.target.value);
             }}
             required
             className="border-2 border-emerald-600 text-lg text-white outline-none placeholder:text-gray-400 bg-transparent py-2 px-6 rounded-full"
@@ -34,7 +34,7 @@ const Login = () => {
           <input
             value={password}
             onChange={(e) => {
-                setpassword(e.target.value);
+              setpassword(e.target.value);
             }}
             required
             className="border-2 border-emerald-600 text-lg mt-3 text-white outline-none placeholder:text-gray-400 bg-transparent py-2 px-6 rounded-full"
