@@ -10,8 +10,8 @@ const Header = (props) => {
   // }
 
   const loggedUser = () => {
-    localStorage.setItem('loggedInUser','')
-    props.changeUser('')
+    localStorage.removeItem('loggedInUser');
+    props.changeUser(null);
     // window.location.reload()
   }
   return (
