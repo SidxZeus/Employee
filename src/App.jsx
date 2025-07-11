@@ -2,13 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 import Login from "./components/Auth/Login";
 import EmployeeDashboard from "./components/Dashboard/EmployeeDashboard";
 import AdminDashboard from "./components/Dashboard/AdminDashboard";
-import { getLocalStorage, setLocalStorage } from "./utils/LocalStorage";
+import { admin as adminArray } from "./utils/LocalStorage";
 import { AuthContext } from "./context/AuthProvider";
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [loggedInUserData, setloggedInUserData] = useState(null);
-  const [userData,setUserData] = useContext(AuthContext);
+  const [userData] = useContext(AuthContext);
 
   useEffect(()=>{
     const loggedInUser = localStorage.getItem("loggedInUser");
@@ -26,10 +26,15 @@ const App = () => {
   },[])
 
   const handleLogin = (email, password) => {
-    if (email === "admin@me.com" && password === "123") {
+    const adminUser = adminArray.find(
+      (a) => a.email === email && a.password === password
+    );
+    if (adminUser) {
       setUser({ role: "admin" });
-      localStorage.setItem("loggedInUser", JSON.stringify({ role: "admin" }));
-    } else if (userData) {
+      localStorage.setItem("loggedInUser", JSON.stringify({ role: "admin", data: adminUser }));
+      return;
+    }
+    if (userData) {
       const employee = userData.find(
         (e) => e.email === email && e.password === password
       );
@@ -40,10 +45,10 @@ const App = () => {
           "loggedInUser",
           JSON.stringify({ role: "employee", data: employee})
         );
+        return;
       }
-    } else {
-      alert("Invalid credentials, please try again.");
     }
+    alert("Invalid credentials, please try again.");
   };
   return (
     <>

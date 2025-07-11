@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Header from '../other/Header'
 import TaskListNummbers from '../other/TaskListNummbers'
 import TaskList from '../TaskList/TaskList'
+import { AuthContext } from "../../context/AuthProvider";
 
 const EmployeeDashboard = (props) => {
   const [stats, setStats] = useState({
@@ -24,6 +25,10 @@ const EmployeeDashboard = (props) => {
 
   const totalTasks = stats.newTasks + stats.activeTasks + stats.completedTasks + stats.failedTasks;
   const completionRate = totalTasks > 0 ? Math.round((stats.completedTasks / totalTasks) * 100) : 0;
+
+  const [userData] = useContext(AuthContext);
+  // Find the latest employee data from context by email
+  const employee = userData?.find(e => e.email === props.data.email) || props.data;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
@@ -180,7 +185,7 @@ const EmployeeDashboard = (props) => {
               <p className="text-gray-300 text-sm">Manage and track your assigned tasks</p>
             </div>
             <div className="p-6">
-              <TaskList data={props.data} />
+              <TaskList data={employee} />
             </div>
           </div>
         </div>

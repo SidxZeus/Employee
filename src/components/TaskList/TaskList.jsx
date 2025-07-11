@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../../context/AuthProvider";
 import AcceptTask from "./AcceptTask";
 import NewTask from "./NewTask";
 import CompleteTask from "./CompleteTask";
@@ -52,44 +53,77 @@ const getStatus = (task) => {
 };
 
 const TaskList = ({ data }) => {
+  const [userData, setUserData] = useContext(AuthContext);
   const tasks = data.tasks || [];
 
   const handleMarkCompleted = (taskIndex) => {
-    // Update the task status to completed
-    if (data.tasks && data.tasks[taskIndex]) {
-      data.tasks[taskIndex].active = false;
-      data.tasks[taskIndex].completed = true;
-      data.tasks[taskIndex].newTask = false;
-      data.tasks[taskIndex].failed = false;
-      
-      // Update task numbers
-      if (data.tasksNumbers) {
-        data.tasksNumbers.active = Math.max(0, (data.tasksNumbers.active || 0) - 1);
-        data.tasksNumbers.completed = (data.tasksNumbers.completed || 0) + 1;
+    if (!userData) return;
+    // Find the employee in userData
+    const updatedUserData = userData.map((emp) => {
+      if (emp.email === data.email) {
+        const updatedTasks = emp.tasks.map((task, idx) => {
+          if (idx === taskIndex) {
+            return {
+              ...task,
+              active: false,
+              completed: true,
+              newTask: false,
+              failed: false,
+            };
+          }
+          return task;
+        });
+        // Update taskNumbers
+        const updatedTaskNumbers = {
+          ...emp.tasksNumbers,
+          active: Math.max(0, (emp.tasksNumbers.active || 0) - 1),
+          completed: (emp.tasksNumbers.completed || 0) + 1,
+        };
+        return {
+          ...emp,
+          tasks: updatedTasks,
+          tasksNumbers: updatedTaskNumbers,
+        };
       }
-      
-      // Force re-render
-      window.location.reload();
-    }
+      return emp;
+    });
+    setUserData(updatedUserData);
+    localStorage.setItem("employees", JSON.stringify(updatedUserData));
   };
 
   const handleMarkFailed = (taskIndex) => {
-    // Update the task status to failed
-    if (data.tasks && data.tasks[taskIndex]) {
-      data.tasks[taskIndex].active = false;
-      data.tasks[taskIndex].failed = true;
-      data.tasks[taskIndex].newTask = false;
-      data.tasks[taskIndex].completed = false;
-      
-      // Update task numbers
-      if (data.tasksNumbers) {
-        data.tasksNumbers.active = Math.max(0, (data.tasksNumbers.active || 0) - 1);
-        data.tasksNumbers.failed = (data.tasksNumbers.failed || 0) + 1;
+    if (!userData) return;
+    // Find the employee in userData
+    const updatedUserData = userData.map((emp) => {
+      if (emp.email === data.email) {
+        const updatedTasks = emp.tasks.map((task, idx) => {
+          if (idx === taskIndex) {
+            return {
+              ...task,
+              active: false,
+              failed: true,
+              newTask: false,
+              completed: false,
+            };
+          }
+          return task;
+        });
+        // Update taskNumbers
+        const updatedTaskNumbers = {
+          ...emp.tasksNumbers,
+          active: Math.max(0, (emp.tasksNumbers.active || 0) - 1),
+          failed: (emp.tasksNumbers.failed || 0) + 1,
+        };
+        return {
+          ...emp,
+          tasks: updatedTasks,
+          tasksNumbers: updatedTaskNumbers,
+        };
       }
-      
-      // Force re-render
-      window.location.reload();
-    }
+      return emp;
+    });
+    setUserData(updatedUserData);
+    localStorage.setItem("employees", JSON.stringify(updatedUserData));
   };
 
   if (!tasks.length) {
