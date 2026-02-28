@@ -62,6 +62,10 @@ const TaskList = ({ data, filterType = 'all' }) => {
       const currentEmployee = userData.find(emp => emp.email === data.email);
       if (!currentEmployee) return;
 
+      const taskToUpdate = currentEmployee.tasks[taskIndex];
+      const wasActive = taskToUpdate.active;
+      const wasNew = taskToUpdate.newTask;
+
       const updatedTasks = currentEmployee.tasks.map((task, idx) => {
         if (idx === taskIndex) {
           return {
@@ -79,7 +83,9 @@ const TaskList = ({ data, filterType = 'all' }) => {
       const updatedTaskNumbers = {
         ...(currentEmployee.taskNumbers || currentEmployee.tasksNumbers || { active: 0, newTask: 0, completed: 0, failed: 0 }),
       };
-      updatedTaskNumbers.active = Math.max(0, (updatedTaskNumbers.active || 0) - 1);
+
+      if (wasActive) updatedTaskNumbers.active = Math.max(0, (updatedTaskNumbers.active || 0) - 1);
+      if (wasNew) updatedTaskNumbers.newTask = Math.max(0, (updatedTaskNumbers.newTask || 0) - 1);
       updatedTaskNumbers.completed = (updatedTaskNumbers.completed || 0) + 1;
 
       // Update Firestore document
@@ -103,6 +109,10 @@ const TaskList = ({ data, filterType = 'all' }) => {
       const currentEmployee = userData.find(emp => emp.email === data.email);
       if (!currentEmployee) return;
 
+      const taskToUpdate = currentEmployee.tasks[taskIndex];
+      const wasActive = taskToUpdate.active;
+      const wasNew = taskToUpdate.newTask;
+
       const updatedTasks = currentEmployee.tasks.map((task, idx) => {
         if (idx === taskIndex) {
           return {
@@ -120,7 +130,9 @@ const TaskList = ({ data, filterType = 'all' }) => {
       const updatedTaskNumbers = {
         ...(currentEmployee.taskNumbers || currentEmployee.tasksNumbers || { active: 0, newTask: 0, completed: 0, failed: 0 }),
       };
-      updatedTaskNumbers.active = Math.max(0, (updatedTaskNumbers.active || 0) - 1);
+
+      if (wasActive) updatedTaskNumbers.active = Math.max(0, (updatedTaskNumbers.active || 0) - 1);
+      if (wasNew) updatedTaskNumbers.newTask = Math.max(0, (updatedTaskNumbers.newTask || 0) - 1);
       updatedTaskNumbers.failed = (updatedTaskNumbers.failed || 0) + 1;
 
       // Update Firestore document
@@ -160,7 +172,7 @@ const TaskList = ({ data, filterType = 'all' }) => {
       {filteredTasks.map((task, idx) => {
         const status = getStatus(task);
         const statusInfo = statusMap[status] || {};
-        const isActive = status === "active";
+        const isActionable = status === "active" || status === "newTask";
 
         return (
           <div
@@ -189,8 +201,8 @@ const TaskList = ({ data, filterType = 'all' }) => {
               </span>
             </div>
 
-            {/* Action Buttons for Active Tasks */}
-            {isActive && (
+            {/* Action Buttons for Active and New Tasks */}
+            {isActionable && (
               <div className="flex gap-2 mt-4">
                 <button
                   onClick={() => handleMarkCompleted(idx)}
