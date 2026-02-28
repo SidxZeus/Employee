@@ -12,7 +12,6 @@ const CreateTask = () => {
   const [assignTo, setAssignTo] = useState('')
   const [category, setCategory] = useState('')
   const [taskDescription, setTaskDescription] = useState('')
-  const [task, setTask] = useState({})
   const [isGenerating, setIsGenerating] = useState(false)
 
   const handleAIGenerate = async (e) => {
@@ -44,7 +43,6 @@ const CreateTask = () => {
       failed: false,
       completed: false
     })
-    setTask(newtask)
 
     // Create a new array reference so React context detects the change
     const data = [...userData]
