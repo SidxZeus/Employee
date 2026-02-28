@@ -1,9 +1,7 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../context/AuthProvider";
-import AcceptTask from "./AcceptTask";
-import NewTask from "./NewTask";
-import CompleteTask from "./CompleteTask";
-import FailedTask from "./FailedTask";
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../../utils/firebase';
 
 const statusMap = {
   active: {
@@ -53,77 +51,89 @@ const getStatus = (task) => {
 };
 
 const TaskList = ({ data, filterType = 'all' }) => {
-  const [userData, setUserData] = useContext(AuthContext);
+  const [userData] = useContext(AuthContext);
   const tasks = data.tasks || [];
 
-  const handleMarkCompleted = (taskIndex) => {
-    if (!userData) return;
-    // Find the employee in userData
-    const updatedUserData = userData.map((emp) => {
-      if (emp.email === data.email) {
-        const updatedTasks = emp.tasks.map((task, idx) => {
-          if (idx === taskIndex) {
-            return {
-              ...task,
-              active: false,
-              completed: true,
-              newTask: false,
-              failed: false,
-            };
-          }
-          return task;
-        });
-        // Update taskNumbers
-        const updatedTaskNumbers = {
-          ...emp.taskNumbers,
-          active: Math.max(0, (emp.taskNumbers.active || 0) - 1),
-          completed: (emp.taskNumbers.completed || 0) + 1,
-        };
-        return {
-          ...emp,
-          tasks: updatedTasks,
-          taskNumbers: updatedTaskNumbers,
-        };
-      }
-      return emp;
-    });
-    setUserData(updatedUserData);
-    localStorage.setItem("employees", JSON.stringify(updatedUserData));
+  const handleMarkCompleted = async (taskIndex) => {
+    if (!userData || !data) return;
+
+    try {
+      // Find the employee in userData
+      const currentEmployee = userData.find(emp => emp.email === data.email);
+      if (!currentEmployee) return;
+
+      const updatedTasks = currentEmployee.tasks.map((task, idx) => {
+        if (idx === taskIndex) {
+          return {
+            ...task,
+            active: false,
+            completed: true,
+            newTask: false,
+            failed: false,
+          };
+        }
+        return task;
+      });
+
+      // Update taskNumbers
+      const updatedTaskNumbers = {
+        ...(currentEmployee.taskNumbers || currentEmployee.tasksNumbers || { active: 0, newTask: 0, completed: 0, failed: 0 }),
+      };
+      updatedTaskNumbers.active = Math.max(0, (updatedTaskNumbers.active || 0) - 1);
+      updatedTaskNumbers.completed = (updatedTaskNumbers.completed || 0) + 1;
+
+      // Update Firestore document
+      const empRef = doc(db, "employees", currentEmployee.id.toString());
+      await updateDoc(empRef, {
+        tasks: updatedTasks,
+        tasksNumbers: updatedTaskNumbers
+      });
+
+    } catch (error) {
+      console.error("Error updating task completion:", error);
+      alert("Failed to update task. Please try again.");
+    }
   };
 
-  const handleMarkFailed = (taskIndex) => {
-    if (!userData) return;
-    // Find the employee in userData
-    const updatedUserData = userData.map((emp) => {
-      if (emp.email === data.email) {
-        const updatedTasks = emp.tasks.map((task, idx) => {
-          if (idx === taskIndex) {
-            return {
-              ...task,
-              active: false,
-              failed: true,
-              newTask: false,
-              completed: false,
-            };
-          }
-          return task;
-        });
-        // Update taskNumbers
-        const updatedTaskNumbers = {
-          ...emp.taskNumbers,
-          active: Math.max(0, (emp.taskNumbers.active || 0) - 1),
-          failed: (emp.taskNumbers.failed || 0) + 1,
-        };
-        return {
-          ...emp,
-          tasks: updatedTasks,
-          taskNumbers: updatedTaskNumbers,
-        };
-      }
-      return emp;
-    });
-    setUserData(updatedUserData);
-    localStorage.setItem("employees", JSON.stringify(updatedUserData));
+  const handleMarkFailed = async (taskIndex) => {
+    if (!userData || !data) return;
+
+    try {
+      // Find the employee in userData
+      const currentEmployee = userData.find(emp => emp.email === data.email);
+      if (!currentEmployee) return;
+
+      const updatedTasks = currentEmployee.tasks.map((task, idx) => {
+        if (idx === taskIndex) {
+          return {
+            ...task,
+            active: false,
+            failed: true,
+            newTask: false,
+            completed: false,
+          };
+        }
+        return task;
+      });
+
+      // Update taskNumbers
+      const updatedTaskNumbers = {
+        ...(currentEmployee.taskNumbers || currentEmployee.tasksNumbers || { active: 0, newTask: 0, completed: 0, failed: 0 }),
+      };
+      updatedTaskNumbers.active = Math.max(0, (updatedTaskNumbers.active || 0) - 1);
+      updatedTaskNumbers.failed = (updatedTaskNumbers.failed || 0) + 1;
+
+      // Update Firestore document
+      const empRef = doc(db, "employees", currentEmployee.id.toString());
+      await updateDoc(empRef, {
+        tasks: updatedTasks,
+        tasksNumbers: updatedTaskNumbers
+      });
+
+    } catch (error) {
+      console.error("Error updating task failure:", error);
+      alert("Failed to update task. Please try again.");
+    }
   };
 
   const filteredTasks = tasks.filter((task) => {

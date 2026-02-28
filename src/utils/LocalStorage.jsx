@@ -1,5 +1,7 @@
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { db } from "./firebase";
 
-const employees = [
+export const employees = [
   {
     id: 1,
     password: "123",
@@ -253,7 +255,7 @@ const employees = [
 ];
 
 
-const admin = [
+export const admin = [
   {
     id: 1,
     password: "123",
@@ -262,13 +264,30 @@ const admin = [
   },
 ];
 
-export const setLocalStorage = () => {
-  localStorage.setItem("employees", JSON.stringify(employees));
+export const initializeFirestore = async () => {
+  try {
+    // Check if the admin document exists first (acts as a flag)
+    const adminDocRef = doc(db, "system", "admin");
+    const adminSnapshot = await getDoc(adminDocRef);
+
+    if (!adminSnapshot.exists()) {
+      console.log("Firestore is empty, seeding initial data...");
+
+      // Write Admin
+      await setDoc(adminDocRef, admin[0]);
+
+      // Write Employees separately inside an 'employees' collection
+      // We will use their ID or a generated string as the document ID
+      for (const emp of employees) {
+        const empRef = doc(db, "employees", emp.id.toString());
+        await setDoc(empRef, emp);
+      }
+      console.log("Initial data seeded to Firestore successfully!");
+    } else {
+      console.log("Firestore already seeded. Skipping initialization.");
+    }
+  } catch (error) {
+    console.error("Error seeding Firestore:", error);
+  }
 };
 
-export const getLocalStorage = () => {
-  const employees = JSON.parse(localStorage.getItem("employees"));
-  return { employees };
-};
-
-export { admin };

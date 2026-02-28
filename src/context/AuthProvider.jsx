@@ -1,19 +1,30 @@
-import React, { createContext, useState, useEffect } from 'react'
-import { getLocalStorage, setLocalStorage } from '../utils/LocalStorage'
+import React, { createContext, useState, useEffect } from 'react';
+import { initializeFirestore } from '../utils/LocalStorage';
+import { collection, onSnapshot, query } from 'firebase/firestore';
+import { db } from '../utils/firebase';
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const AuthContext = createContext()
+export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  //  localStorage.clear()
-  const [UserData, setUserData] = useState(null)
+  const [UserData, setUserData] = useState(null);
+
   useEffect(() => {
-    setLocalStorage()
-    const { employees } = getLocalStorage()
-    setUserData(employees)
+    // 1. One-time check and DB creation if it doesn't exist
+    initializeFirestore();
 
-  }, [])
+    // 2. Setup real-time listener to Firestore `employees` collection
+    const q = query(collection(db, "employees"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const liveEmployees = [];
+      snapshot.forEach((doc) => {
+        liveEmployees.push({ id: doc.id, ...doc.data() });
+      });
+      setUserData(liveEmployees);
+    });
 
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div>

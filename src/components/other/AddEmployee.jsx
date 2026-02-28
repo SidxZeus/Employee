@@ -1,15 +1,16 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../../context/AuthProvider';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '../../utils/firebase';
 
 const AddEmployee = () => {
-    const [userData, setUserData] = useContext(AuthContext);
-
+    const [userData] = useContext(AuthContext);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
 
         // Basic validation
@@ -34,21 +35,27 @@ const AddEmployee = () => {
             name: lastName ? `${firstName} ${lastName}` : firstName,
             email: email,
             password: password,
-            taskNumbers: { active: 0, newTask: 0, completed: 0, failed: 0 },
+            tasksNumbers: { active: 0, newTask: 0, completed: 0, failed: 0 },
             tasks: []
         };
 
-        // Update state and localStorage
-        const newData = userData ? [...userData, newEmployee] : [newEmployee];
-        setUserData(newData);
-        localStorage.setItem("employees", JSON.stringify(newData));
+        try {
+            // Write directly to Firestore
+            await setDoc(doc(db, "employees", newEmployee.id.toString()), newEmployee);
 
-        // Reset Form
-        setFirstName('');
-        setLastName('');
-        setEmail('');
-        setPassword('');
-        alert("Employee successfully added!");
+            // The AuthProvider's onSnapshot listener will automatically update the 
+            // userData array across the app, so we don't need to manually update state here.
+
+            // Reset Form
+            setFirstName('');
+            setLastName('');
+            setEmail('');
+            setPassword('');
+            alert("Employee successfully added!");
+        } catch (error) {
+            console.error("Error adding employee:", error);
+            alert("Failed to add employee to database. Please try again.");
+        }
     };
 
     return (

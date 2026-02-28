@@ -1,9 +1,11 @@
 import React, { useContext, useState } from 'react'
-import { AuthContext } from '../../context/AuthProvider'
-import { generateTaskDetails } from '../../utils/aiService'
+import { AuthContext } from '../../context/AuthProvider';
+import { generateTaskDetails } from '../../utils/aiService';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../../utils/firebase';
 
 const CreateTask = () => {
-  const [userData, setUserData] = useContext(AuthContext)
+  const [userData] = useContext(AuthContext);
 
 
 
@@ -43,10 +45,11 @@ const CreateTask = () => {
       alert("Failed to generate task details. Please check your API key or try again.");
     }
     setIsGenerating(false);
+    setIsGenerating(false);
   };
 
-  const submitHandler = (e) => {
-    e.preventDefault()
+  const submitHandler = async (e) => {
+    e.preventDefault();
 
     const newtask = ({
       title: taskTitle,           // Changed from taskTitle to title
@@ -59,29 +62,41 @@ const CreateTask = () => {
       completed: false
     })
 
-    // Create a new array reference so React context detects the change
-    const data = [...userData]
-
-    data.forEach(function (elem) {
-      if (assignTo == elem.firstName) {
-        elem.tasks.push(newtask)
-        // Ensure taskNumbers object exists
-        if (!elem.taskNumbers) elem.taskNumbers = {};
-        elem.taskNumbers.newTask = (elem.taskNumbers.newTask || 0) + 1;
+    // Update the task in Firestore instead of localStorage
+    try {
+      const assignedEmployee = userData.find(emp => emp.firstName === assignTo);
+      if (!assignedEmployee) {
+        alert("Employee not found!");
+        return;
       }
-    })
-    setUserData(data)
-    localStorage.setItem("employees", JSON.stringify(data))
-    console.log(data)
-    // Only update localStorage if a task was assigned
 
-    setTaskTitle('')
-    setCategory('')
-    setTaskDate('')
-    setTaskDescription('')
-    setAssignTo('')
+      // Update the tasks array and taskNumbers locally first
+      const updatedTasks = [...(assignedEmployee.tasks || []), newtask];
+      const updatedTaskNumbers = {
+        ...(assignedEmployee.tasksNumbers || { active: 0, newTask: 0, completed: 0, failed: 0 }),
+      };
+      updatedTaskNumbers.newTask = (updatedTaskNumbers.newTask || 0) + 1;
 
+      // Update Firestore document
+      const empRef = doc(db, "employees", assignedEmployee.id.toString());
+      await updateDoc(empRef, {
+        tasks: updatedTasks,
+        tasksNumbers: updatedTaskNumbers
+      });
+
+      // Reset Form fields
+      setTaskTitle('');
+      setCategory('');
+      setTaskDate('');
+      setTaskDescription('');
+      setAssignTo('');
+
+    } catch (error) {
+      console.error("Error creating task:", error);
+      alert("Failed to create task. Please try again.");
+    }
   };
+
   return (
     <div className="p-5 bg-[#1c1c1c] mt-7 rounded">
       <form onSubmit={submitHandler} className="flex w-full flex-wrap items-start justify-between">
