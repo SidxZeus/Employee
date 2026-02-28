@@ -13,6 +13,21 @@ const CreateTask = () => {
   const [category, setCategory] = useState('')
   const [taskDescription, setTaskDescription] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
+  const [showSuggestions, setShowSuggestions] = useState(false)
+
+  const handleAssignToChange = (e) => {
+    setAssignTo(e.target.value)
+    setShowSuggestions(true)
+  }
+
+  const handleSuggestionClick = (firstName) => {
+    setAssignTo(firstName)
+    setShowSuggestions(false)
+  }
+
+  const filteredEmployees = userData?.filter(emp =>
+    emp.firstName.toLowerCase().includes(assignTo.toLowerCase())
+  ) || []
 
   const handleAIGenerate = async (e) => {
     e.preventDefault();
@@ -103,15 +118,30 @@ const CreateTask = () => {
               type="date"
             />
           </div>
-          <div>
+          <div className="relative">
             <h3 className="text-sm text-gray-300 mb-0.5">Assign to</h3>
             <input
               value={assignTo}
-              onChange={(e) => { setAssignTo(e.target.value) }}
-              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4"
+              onChange={handleAssignToChange}
+              onFocus={() => setShowSuggestions(true)}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4 focus:border-purple-500 transition-colors"
               type="text"
-              placeholder="Assign to"
+              placeholder="Assign to (First Name)"
             />
+            {showSuggestions && assignTo && filteredEmployees.length > 0 && (
+              <ul className="absolute z-10 w-4/5 bg-gray-800 border border-gray-600 rounded mt-[-12px] max-h-40 overflow-y-auto shadow-lg">
+                {filteredEmployees.map(emp => (
+                  <li
+                    key={emp.id}
+                    onClick={() => handleSuggestionClick(emp.firstName)}
+                    className="px-3 py-2 text-sm text-gray-200 hover:bg-purple-600 cursor-pointer transition-colors"
+                  >
+                    {emp.firstName} {emp.name && emp.name !== emp.firstName ? `(${emp.name})` : ''}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
           <div>
             <h3 className="text-sm text-gray-300 mb-0.5">Category</h3>
