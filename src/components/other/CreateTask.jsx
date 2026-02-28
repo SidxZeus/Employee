@@ -125,13 +125,19 @@ const CreateTask = () => {
                 </button>
               </div>
             </div>
-            <h3 className="text-sm text-gray-300 mb-0.5">Date</h3>
+            <h3 className="text-sm text-gray-300 mb-0.5 flex items-center gap-1">
+              <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Deadline
+            </h3>
             <input
               value={taskDate}
               onChange={(e) => { setTaskDate(e.target.value) }}
-              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4 text-gray-200"
+              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-red-400/50 mb-4 text-gray-200 focus:border-red-400 transition-colors"
               style={{ colorScheme: "dark" }}
               type="date"
+              min={new Date().toISOString().split('T')[0]}
             />
           </div>
           <div className="relative">
