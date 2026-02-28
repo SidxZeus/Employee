@@ -10,12 +10,12 @@ const App = () => {
   const [loggedInUserData, setloggedInUserData] = useState(null);
   const [userData] = useContext(AuthContext);
 
-  useEffect(()=>{
+  useEffect(() => {
     const loggedInUser = localStorage.getItem("loggedInUser");
-    if(loggedInUser){
+    if (loggedInUser) {
       const userData = JSON.parse(loggedInUser);
       setUser({ role: userData.role });
-      
+
       // For employees, use the data property; for admin, use the whole object
       if (userData.role === "employee" && userData.data) {
         setloggedInUserData(userData.data);
@@ -23,7 +23,7 @@ const App = () => {
         setloggedInUserData(userData);
       }
     }
-  },[])
+  }, [])
 
   const handleLogin = (email, password) => {
     const adminUser = adminArray.find(
@@ -43,7 +43,7 @@ const App = () => {
         setloggedInUserData(employee);
         localStorage.setItem(
           "loggedInUser",
-          JSON.stringify({ role: "employee", data: employee})
+          JSON.stringify({ role: "employee", data: employee })
         );
         return;
       }

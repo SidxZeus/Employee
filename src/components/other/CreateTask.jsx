@@ -109,7 +109,7 @@ const CreateTask = () => {
                 <input
                   value={taskTitle}
                   onChange={(e) => { setTaskTitle(e.target.value) }}
-                  className="text-sm py-1 px-2 flex-grow rounded outline-none bg-transparent border-[1px] border-gray-400"
+                  className="text-sm py-1 px-2 flex-grow rounded outline-none bg-transparent border-[1px] border-gray-400 text-gray-200"
                   type="text"
                   placeholder="Make a UI design"
                 />
@@ -129,7 +129,8 @@ const CreateTask = () => {
             <input
               value={taskDate}
               onChange={(e) => { setTaskDate(e.target.value) }}
-              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4"
+              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4 text-gray-200"
+              style={{ colorScheme: "dark" }}
               type="date"
             />
           </div>
@@ -140,7 +141,7 @@ const CreateTask = () => {
               onChange={handleAssignToChange}
               onFocus={() => setShowSuggestions(true)}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4 focus:border-purple-500 transition-colors"
+              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4 focus:border-purple-500 transition-colors text-gray-200"
               type="text"
               placeholder="Assign to (First Name)"
             />
@@ -163,7 +164,7 @@ const CreateTask = () => {
             <input
               value={category}
               onChange={(e) => { setCategory(e.target.value) }}
-              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4"
+              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4 text-gray-200"
               type="text"
               placeholder="Design, Dev"
             />
@@ -174,7 +175,7 @@ const CreateTask = () => {
           <textarea
             value={taskDescription}
             onChange={(e) => { setTaskDescription(e.target.value) }}
-            className="w-full h-44 text-sm py-2 px-4 rounded outline-none bg-transparent border-[1px] border-gray-400"
+            className="w-full h-44 text-sm py-2 px-4 rounded outline-none bg-transparent border-[1px] border-gray-400 text-gray-200"
             name=""
             id=""
             cols="30"

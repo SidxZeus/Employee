@@ -1,0 +1,9 @@
+
+D:\Projects\Employee\vite-project\src\components\other\CreateTask.jsx
+  4:15  error  'getDoc' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+D:\Projects\Employee\vite-project\src\context\AuthProvider.jsx
+  6:14  warning  Fast refresh only works when a file only exports components. Move your React context(s) to a separate file  react-refresh/only-export-components
+
+✖ 2 problems (1 error, 1 warning)
+

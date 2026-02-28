@@ -85,7 +85,6 @@ const Header = (props) => {
           <div className="flex items-center space-x-8">
             {/* Navigation Links */}
             <nav className="hidden md:flex items-center space-x-6">
-              <a href="#" className="text-purple-200 hover:text-white transition-colors duration-200 font-medium">Skeleton</a>
             </nav>
 
             {/* User Profile Dropdown */}

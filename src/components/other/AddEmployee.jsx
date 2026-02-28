@@ -67,7 +67,7 @@ const AddEmployee = () => {
                         <input
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
-                            className="text-sm py-2 px-3 w-full rounded outline-none bg-transparent border-[1px] border-gray-400 focus:border-purple-500 transition-colors"
+                            className="text-sm py-2 px-3 w-full rounded outline-none bg-transparent border-[1px] border-gray-400 focus:border-purple-500 transition-colors text-gray-200"
                             type="text"
                             placeholder="John"
                             required
@@ -78,7 +78,7 @@ const AddEmployee = () => {
                         <input
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
-                            className="text-sm py-2 px-3 w-full rounded outline-none bg-transparent border-[1px] border-gray-400 focus:border-purple-500 transition-colors"
+                            className="text-sm py-2 px-3 w-full rounded outline-none bg-transparent border-[1px] border-gray-400 focus:border-purple-500 transition-colors text-gray-200"
                             type="text"
                             placeholder="Doe"
                         />
@@ -91,7 +91,7 @@ const AddEmployee = () => {
                         <input
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="text-sm py-2 px-3 w-full rounded outline-none bg-transparent border-[1px] border-gray-400 focus:border-purple-500 transition-colors"
+                            className="text-sm py-2 px-3 w-full rounded outline-none bg-transparent border-[1px] border-gray-400 focus:border-purple-500 transition-colors text-gray-200"
                             type="email"
                             placeholder="employee@example.com"
                             required
@@ -102,7 +102,7 @@ const AddEmployee = () => {
                         <input
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="text-sm py-2 px-3 w-full rounded outline-none bg-transparent border-[1px] border-gray-400 focus:border-purple-500 transition-colors"
+                            className="text-sm py-2 px-3 w-full rounded outline-none bg-transparent border-[1px] border-gray-400 focus:border-purple-500 transition-colors text-gray-200"
                             type="password"
                             placeholder="Enter a secure password"
                             required
