@@ -53,13 +53,8 @@ const Header = (props) => {
     <div className="bg-white/10 backdrop-blur-lg border-b border-white/20 mb-8">
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          {/* Left side - Toll No, Customer Support, Brand */}
+          {/* Left side - Brand */}
           <div className="flex items-center space-x-8">
-            {/* Toll No and Customer Support */}
-            <div className="flex items-center space-x-4">
-              <a href="#" className="text-purple-200 hover:text-white transition-colors duration-200 font-medium">Toll No</a>
-              <a href="#" className="text-purple-200 hover:text-white transition-colors duration-200 font-medium">Customer Support</a>
-            </div>
             {/* Logo/Brand */}
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -86,31 +81,12 @@ const Header = (props) => {
             </div>
           </div>
 
-          {/* Right side - My Orders, Track Your Order, My Account, User Profile */}
-          <div className="flex items-center space-x-4">
-            {/* New Navigation Links */}
+          {/* Right side - Navigation and User Profile */}
+          <div className="flex items-center space-x-8">
+            {/* Navigation Links */}
             <nav className="hidden md:flex items-center space-x-6">
-              <a href="#" className="text-purple-200 hover:text-white transition-colors duration-200 font-medium">My Orders</a>
-              <a href="#" className="text-purple-200 hover:text-white transition-colors duration-200 font-medium">Track Your Order</a>
-              <a href="#" className="text-purple-200 hover:text-white transition-colors duration-200 font-medium">My Account</a>
+              <a href="#" className="text-purple-200 hover:text-white transition-colors duration-200 font-medium">Skeleton</a>
             </nav>
-            {/* Notifications */}
-            <button className="relative p-2 text-purple-200 hover:text-white transition-colors duration-200">
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 17h5l-5 5v-5zM4.19 4.19A2 2 0 004 6v10a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-1.81 1.19z"
-                />
-              </svg>
-              <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
-            </button>
 
             {/* User Profile Dropdown */}
             <div className="relative">
@@ -130,9 +106,8 @@ const Header = (props) => {
                   <p className="text-xs text-purple-200">{getUserRole()}</p>
                 </div>
                 <svg
-                  className={`w-4 h-4 text-purple-200 transition-transform duration-200 ${
-                    showDropdown ? "rotate-180" : ""
-                  }`}
+                  className={`w-4 h-4 text-purple-200 transition-transform duration-200 ${showDropdown ? "rotate-180" : ""
+                    }`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
