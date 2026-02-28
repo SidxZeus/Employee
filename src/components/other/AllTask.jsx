@@ -35,10 +35,10 @@ const AllTask = () => {
       </div>
 
       {/* Table Body */}
-      <div className="max-h-96 overflow-y-auto custom-scrollbar">
+      <div className="max-h-96 overflow-y-auto custom-scrollbar flex flex-col">
         {userData && userData.map((elem, idx) => (
-          <div 
-            key={idx} 
+          <div
+            key={idx}
             className="grid grid-cols-5 gap-6 p-6 border-b border-white/10 hover:bg-white/5 transition-all duration-200 animate-fade-in"
             style={{ animationDelay: `${idx * 100}ms` }}
           >
@@ -56,28 +56,28 @@ const AllTask = () => {
             {/* New Tasks Column */}
             <div className="flex items-center justify-center">
               <span className="bg-blue-500/20 text-blue-300 px-4 py-2 rounded-full text-sm font-medium min-w-[60px] text-center">
-                {elem.tasksNumbers?.newTask || 0}
+                {elem.tasksNumbers?.newTask || elem.taskNumbers?.newTask || 0}
               </span>
             </div>
 
             {/* Active Tasks Column */}
             <div className="flex items-center justify-center">
               <span className="bg-yellow-500/20 text-yellow-300 px-4 py-2 rounded-full text-sm font-medium min-w-[60px] text-center">
-                {elem.tasksNumbers?.active || 0}
+                {elem.tasksNumbers?.active || elem.taskNumbers?.active || 0}
               </span>
             </div>
 
             {/* Completed Tasks Column */}
             <div className="flex items-center justify-center">
               <span className="bg-green-500/20 text-green-300 px-4 py-2 rounded-full text-sm font-medium min-w-[60px] text-center">
-                {elem.tasksNumbers?.completed || 0}
+                {elem.tasksNumbers?.completed || elem.taskNumbers?.completed || 0}
               </span>
             </div>
 
             {/* Failed Tasks Column */}
             <div className="flex items-center justify-center">
               <span className="bg-red-500/20 text-red-300 px-4 py-2 rounded-full text-sm font-medium min-w-[60px] text-center">
-                {elem.tasksNumbers?.failed || 0}
+                {elem.tasksNumbers?.failed || elem.taskNumbers?.failed || 0}
               </span>
             </div>
           </div>
@@ -106,22 +106,22 @@ const AllTask = () => {
             </div>
             <div className="flex items-center justify-center">
               <span className="bg-blue-500/20 text-blue-300 px-4 py-2 rounded-full text-sm font-medium min-w-[60px] text-center">
-                {userData.reduce((sum, emp) => sum + (emp.tasksNumbers?.newTask || 0), 0)}
+                {userData.reduce((sum, emp) => sum + (emp.tasksNumbers?.newTask || emp.taskNumbers?.newTask || 0), 0)}
               </span>
             </div>
             <div className="flex items-center justify-center">
               <span className="bg-yellow-500/20 text-yellow-300 px-4 py-2 rounded-full text-sm font-medium min-w-[60px] text-center">
-                {userData.reduce((sum, emp) => sum + (emp.tasksNumbers?.active || 0), 0)}
+                {userData.reduce((sum, emp) => sum + (emp.tasksNumbers?.active || emp.taskNumbers?.active || 0), 0)}
               </span>
             </div>
             <div className="flex items-center justify-center">
               <span className="bg-green-500/20 text-green-300 px-4 py-2 rounded-full text-sm font-medium min-w-[60px] text-center">
-                {userData.reduce((sum, emp) => sum + (emp.tasksNumbers?.completed || 0), 0)}
+                {userData.reduce((sum, emp) => sum + (emp.tasksNumbers?.completed || emp.taskNumbers?.completed || 0), 0)}
               </span>
             </div>
             <div className="flex items-center justify-center">
               <span className="bg-red-500/20 text-red-300 px-4 py-2 rounded-full text-sm font-medium min-w-[60px] text-center">
-                {userData.reduce((sum, emp) => sum + (emp.tasksNumbers?.failed || 0), 0)}
+                {userData.reduce((sum, emp) => sum + (emp.tasksNumbers?.failed || emp.taskNumbers?.failed || 0), 0)}
               </span>
             </div>
           </div>
