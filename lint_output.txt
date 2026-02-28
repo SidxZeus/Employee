@@ -1,0 +1,10 @@
+
+> vite-project@0.0.0 lint
+> eslint .
+
+
+D:\Projects\Employee\vite-project\src\components\other\CreateTask.jsx
+  46:5  error  'setTask' is not defined  no-undef
+
+✖ 1 problem (1 error, 0 warnings)
+

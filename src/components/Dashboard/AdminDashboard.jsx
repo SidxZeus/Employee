@@ -1,12 +1,14 @@
 import React, { useState, useContext, useEffect } from "react";
 import Header from "../other/Header";
 import CreateTask from "../other/CreateTask";
+import AddEmployee from "../other/AddEmployee";
 import AllTask from "../other/AllTask";
 import { AuthContext } from "../../context/AuthProvider";
 
 const AdminDashboard = (props) => {
   const [userData] = useContext(AuthContext);
   const [showCreateTask, setShowCreateTask] = useState(false);
+  const [showAddEmployee, setShowAddEmployee] = useState(false);
   const [stats, setStats] = useState({
     totalEmployees: 0,
     totalTasks: 0,
@@ -124,8 +126,8 @@ const AdminDashboard = (props) => {
             <h2 className="text-2xl font-bold text-white mb-4">Quick Actions</h2>
             <div className="flex flex-wrap gap-4">
               <button
-                onClick={() => setShowCreateTask(!showCreateTask)}
-                className="flex items-center gap-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                onClick={() => { setShowCreateTask(!showCreateTask); setShowAddEmployee(false); }}
+                className={`flex items-center gap-3 px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 ${showCreateTask ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg' : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'}`}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -133,11 +135,14 @@ const AdminDashboard = (props) => {
                 {showCreateTask ? 'Hide Task Creator' : 'Create New Task'}
               </button>
 
-              <button className="flex items-center gap-3 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 border border-white/20">
+              <button
+                onClick={() => { setShowAddEmployee(!showAddEmployee); setShowCreateTask(false); }}
+                className={`flex items-center gap-3 px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 border border-white/20 ${showAddEmployee ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg' : 'bg-white/10 hover:bg-white/20 text-white'}`}
+              >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                 </svg>
-                Add Employee
+                {showAddEmployee ? 'Hide Add Employee' : 'Add Employee'}
               </button>
 
               <button className="flex items-center gap-3 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 border border-white/20">
@@ -160,6 +165,21 @@ const AdminDashboard = (props) => {
               </div>
               <div className="p-6">
                 <CreateTask />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Add Employee Section */}
+        {showAddEmployee && (
+          <div className="mb-8 animate-slide-down">
+            <div className="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 overflow-hidden">
+              <div className="bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-4">
+                <h2 className="text-xl font-bold text-white">Register New Employee</h2>
+                <p className="text-purple-100 text-sm">Add a new team member to the system</p>
+              </div>
+              <div className="p-6">
+                <AddEmployee />
               </div>
             </div>
           </div>
