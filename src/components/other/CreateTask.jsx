@@ -45,15 +45,20 @@ const CreateTask = () => {
       completed: false
     })
     setTask(newtask)
-    const data = userData
+
+    // Create a new array reference so React context detects the change
+    const data = [...userData]
 
     data.forEach(function (elem) {
       if (assignTo == elem.firstName) {
         elem.tasks.push(newtask)
-        elem.taskNumbers.newTask = elem.taskNumbers.newTask + 1
+        // Ensure taskNumbers object exists
+        if (!elem.taskNumbers) elem.taskNumbers = {};
+        elem.taskNumbers.newTask = (elem.taskNumbers.newTask || 0) + 1;
       }
     })
     setUserData(data)
+    localStorage.setItem("employees", JSON.stringify(data))
     console.log(data)
     // Only update localStorage if a task was assigned
 
@@ -84,8 +89,8 @@ const CreateTask = () => {
                   onClick={handleAIGenerate}
                   disabled={isGenerating || !taskTitle}
                   className={`text-sm px-3 rounded font-medium transition-colors ${isGenerating || !taskTitle
-                      ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                      : 'bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-500/20'
+                    ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                    : 'bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-500/20'
                     }`}
                 >
                   {isGenerating ? "✨ Thinking..." : "✨ Auto-Fill"}
