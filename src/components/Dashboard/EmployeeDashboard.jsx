@@ -9,11 +9,12 @@ const EmployeeDashboard = (props) => {
   // Find the latest employee data from context by email
   const employee = userData?.find(e => e.email === props.data.email) || props.data;
 
+  const taskNums = employee?.tasksNumbers || employee?.taskNumbers || { active: 0, newTask: 0, completed: 0, failed: 0 };
   const stats = {
-    newTasks: employee?.taskNumbers?.newTask || 0,
-    activeTasks: employee?.taskNumbers?.active || 0,
-    completedTasks: employee?.taskNumbers?.completed || 0,
-    failedTasks: employee?.taskNumbers?.failed || 0
+    newTasks: taskNums.newTask || 0,
+    activeTasks: taskNums.active || 0,
+    completedTasks: taskNums.completed || 0,
+    failedTasks: taskNums.failed || 0
   };
 
   const totalTasks = stats.newTasks + stats.activeTasks + stats.completedTasks + stats.failedTasks;

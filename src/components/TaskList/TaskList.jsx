@@ -50,6 +50,54 @@ const getStatus = (task) => {
   return "unknown";
 };
 
+const getDeadlineInfo = (dateStr) => {
+  if (!dateStr) return null;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const deadline = new Date(dateStr);
+  deadline.setHours(0, 0, 0, 0);
+  const diffTime = deadline - today;
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  if (diffDays < 0) {
+    return {
+      label: `Overdue by ${Math.abs(diffDays)} day${Math.abs(diffDays) > 1 ? 's' : ''}`,
+      color: 'text-red-400',
+      bgColor: 'bg-red-500/20 border-red-500/30',
+      icon: '🔴',
+      isOverdue: true,
+      daysLeft: diffDays
+    };
+  } else if (diffDays === 0) {
+    return {
+      label: 'Due Today!',
+      color: 'text-yellow-400',
+      bgColor: 'bg-yellow-500/20 border-yellow-500/30',
+      icon: '🟡',
+      isOverdue: false,
+      daysLeft: 0
+    };
+  } else if (diffDays <= 3) {
+    return {
+      label: `${diffDays} day${diffDays > 1 ? 's' : ''} left`,
+      color: 'text-orange-400',
+      bgColor: 'bg-orange-500/20 border-orange-500/30',
+      icon: '🟠',
+      isOverdue: false,
+      daysLeft: diffDays
+    };
+  } else {
+    return {
+      label: `${diffDays} days left`,
+      color: 'text-green-400',
+      bgColor: 'bg-green-500/20 border-green-500/30',
+      icon: '🟢',
+      isOverdue: false,
+      daysLeft: diffDays
+    };
+  }
+};
+
 const TaskList = ({ data, filterType = 'all' }) => {
   const [userData] = useContext(AuthContext);
   const tasks = data.tasks || [];
@@ -192,14 +240,30 @@ const TaskList = ({ data, filterType = 'all' }) => {
             <div className="flex-1"></div>
 
             {/* Category and Date */}
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-2">
               <span className="text-xs text-purple-300 bg-white/10 px-3 py-1 rounded-full">
                 {task.category}
               </span>
               <span className="text-xs text-purple-300 bg-white/10 px-3 py-1 rounded-full">
-                {task.date}
+                📅 {task.date}
               </span>
             </div>
+
+            {/* Deadline Indicator */}
+            {task.date && (() => {
+              const deadlineInfo = getDeadlineInfo(task.date);
+              if (!deadlineInfo) return null;
+              const isFinished = status === 'completed' || status === 'failed';
+              if (isFinished) return null;
+              return (
+                <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border ${deadlineInfo.bgColor} mb-2 ${deadlineInfo.isOverdue ? 'animate-pulse' : ''}`}>
+                  <span>{deadlineInfo.icon}</span>
+                  <span className={`text-xs font-semibold ${deadlineInfo.color}`}>
+                    {deadlineInfo.label}
+                  </span>
+                </div>
+              );
+            })()}
 
             {/* Action Buttons for Active and New Tasks */}
             {isActionable && (
