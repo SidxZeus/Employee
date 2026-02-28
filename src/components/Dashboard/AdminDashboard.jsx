@@ -9,6 +9,7 @@ const AdminDashboard = (props) => {
   const [userData] = useContext(AuthContext);
   const [showCreateTask, setShowCreateTask] = useState(false);
   const [showAddEmployee, setShowAddEmployee] = useState(false);
+  const [showReports, setShowReports] = useState(false);
   const [stats, setStats] = useState({
     totalEmployees: 0,
     totalTasks: 0,
@@ -145,11 +146,14 @@ const AdminDashboard = (props) => {
                 {showAddEmployee ? 'Hide Add Employee' : 'Add Employee'}
               </button>
 
-              <button className="flex items-center gap-3 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 border border-white/20">
+              <button
+                onClick={() => { setShowReports(!showReports); setShowCreateTask(false); setShowAddEmployee(false); }}
+                className={`flex items-center gap-3 px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 border border-white/20 ${showReports ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg' : 'bg-white/10 hover:bg-white/20 text-white'}`}
+              >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
-                View Reports
+                {showReports ? 'Hide Reports' : 'View Reports'}
               </button>
             </div>
           </div>
@@ -186,17 +190,19 @@ const AdminDashboard = (props) => {
         )}
 
         {/* Task Overview */}
-        <div className="animate-fade-in animation-delay-500">
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 overflow-hidden">
-            <div className="bg-gradient-to-r from-gray-700 to-gray-800 px-6 py-4">
-              <h2 className="text-xl font-bold text-white">Team Task Overview</h2>
-              <p className="text-gray-300 text-sm">Monitor task distribution across your team</p>
-            </div>
-            <div className="p-6">
-              <AllTask />
+        {showReports && (
+          <div className="animate-fade-in animation-delay-500">
+            <div className="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 overflow-hidden">
+              <div className="bg-gradient-to-r from-gray-700 to-gray-800 px-6 py-4">
+                <h2 className="text-xl font-bold text-white">Team Task Overview</h2>
+                <p className="text-gray-300 text-sm">Monitor task distribution across your team</p>
+              </div>
+              <div className="p-6">
+                <AllTask />
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
