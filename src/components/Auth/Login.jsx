@@ -131,7 +131,7 @@ const Login = ({ handleLogin }) => {
           <div className="mt-6 p-4 bg-white/5 rounded-xl border border-white/10">
             <h3 className="text-sm font-medium text-purple-200 mb-2">Demo Credentials:</h3>
             <div className="space-y-1 text-xs text-purple-300">
-              <p><span className="font-medium">Admin:</span> admin@me.com / 123</p>
+              <p><span className="font-medium">Admin:</span> sid@gmail.com / 123</p>
               <p><span className="font-medium">Employee:</span> Use registered credentials</p>
             </div>
           </div>

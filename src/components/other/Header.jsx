@@ -53,8 +53,13 @@ const Header = (props) => {
     <div className="bg-white/10 backdrop-blur-lg border-b border-white/20 mb-8">
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          {/* Left side - Brand and Navigation */}
+          {/* Left side - Toll No, Customer Support, Brand */}
           <div className="flex items-center space-x-8">
+            {/* Toll No and Customer Support */}
+            <div className="flex items-center space-x-4">
+              <a href="#" className="text-purple-200 hover:text-white transition-colors duration-200 font-medium">Toll No</a>
+              <a href="#" className="text-purple-200 hover:text-white transition-colors duration-200 font-medium">Customer Support</a>
+            </div>
             {/* Logo/Brand */}
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -79,38 +84,16 @@ const Header = (props) => {
                 </p>
               </div>
             </div>
-
-            {/* Navigation Links */}
-            <nav className="hidden md:flex items-center space-x-6">
-              <a
-                href="#"
-                className="text-purple-200 hover:text-white transition-colors duration-200 font-medium"
-              >
-                Dashboard
-              </a>
-              <a
-                href="#"
-                className="text-purple-200 hover:text-white transition-colors duration-200 font-medium"
-              >
-                Tasks
-              </a>
-              <a
-                href="#"
-                className="text-purple-200 hover:text-white transition-colors duration-200 font-medium"
-              >
-                Team
-              </a>
-              <a
-                href="#"
-                className="text-purple-200 hover:text-white transition-colors duration-200 font-medium"
-              >
-                Reports
-              </a>
-            </nav>
           </div>
 
-          {/* Right side - User Profile and Actions */}
+          {/* Right side - My Orders, Track Your Order, My Account, User Profile */}
           <div className="flex items-center space-x-4">
+            {/* New Navigation Links */}
+            <nav className="hidden md:flex items-center space-x-6">
+              <a href="#" className="text-purple-200 hover:text-white transition-colors duration-200 font-medium">My Orders</a>
+              <a href="#" className="text-purple-200 hover:text-white transition-colors duration-200 font-medium">Track Your Order</a>
+              <a href="#" className="text-purple-200 hover:text-white transition-colors duration-200 font-medium">My Account</a>
+            </nav>
             {/* Notifications */}
             <button className="relative p-2 text-purple-200 hover:text-white transition-colors duration-200">
               <svg
