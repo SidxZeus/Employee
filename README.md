@@ -1,13 +1,12 @@
 # 🚀 TaskFlow Pro - Modern Task Management System
 
-<div align="center">
-
 ![TaskFlow Pro](https://img.shields.io/badge/TaskFlow-Pro-brightgreen)
 ![React](https://img.shields.io/badge/React-19.1.0-blue)
 ![Vite](https://img.shields.io/badge/Vite-6.3.5-purple)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4.17-cyan)
+![Firebase](https://img.shields.io/badge/Firebase-11.3.1-orange)
 
-**A sleek, modern task management application built with React and Tailwind CSS**
+**A sleek, modern task management application built with React, Tailwind CSS, and Firebase**
 
 [Features](#-features) • [Demo](#-demo) • [Installation](#-installation) • [Usage](#-usage) • [Tech Stack](#-tech-stack)
 
@@ -19,15 +18,15 @@
 
 ### 🔐 **Authentication System**
 - **Dual Role Support**: Admin and Employee login systems
-- **Secure Authentication**: Email and password-based login
-- **Session Management**: Persistent login state with localStorage
+- **Secure Authentication**: Integrated with Firebase Authentication
+- **Session Management**: Persistent login state with local caching
 - **Role-based Access**: Different dashboards for different user types
 
 ### 📊 **Admin Dashboard**
-- **Task Creation**: Create and assign tasks to employees
-- **Employee Management**: View and manage employee data
+- **Task Creation**: Create and assign tasks to employees and save to Firestore
+- **Employee Management**: View and manage employee data synced real-time
 - **Task Overview**: Monitor all tasks across the organization
-- **Real-time Updates**: Instant task status changes
+- **Real-time Updates**: Instant task status changes via Firebase real-time listeners
 
 ### 👥 **Employee Dashboard**
 - **Task Management**: View assigned tasks with different statuses
@@ -56,10 +55,10 @@
 - **Employee Login**: Use registered employee credentials
 
 ### Key Features Demo
-- Create new tasks with detailed information
+- Create new tasks with detailed information (synced to Firestore)
 - Assign tasks to specific employees
 - Track task progress through different statuses
-- Real-time dashboard updates
+- Real-time dashboard updates across all users
 
 ---
 
@@ -82,12 +81,29 @@
    npm install
    ```
 
-3. **Start the development server**
+3. **Configure Firebase Environment**
+   Create a `.env` file in the root directory and add your Firebase configuration:
+   ```env
+   VITE_FIREBASE_API_KEY=your_api_key
+   VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+   VITE_FIREBASE_PROJECT_ID=your_project_id
+   VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+   VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+   VITE_FIREBASE_APP_ID=your_app_id
+   ```
+
+4. **Seed Database (Initial Setup)**
+   Run the seeding script to populate Firestore with initial admin and employee data:
+   ```bash
+   node seed-firestore.js
+   ```
+
+5. **Start the development server**
    ```bash
    npm run dev
    ```
 
-4. **Open your browser**
+6. **Open your browser**
    Navigate to `http://localhost:5173`
 
 ---
@@ -148,9 +164,9 @@ src/
 │       ├── Header.jsx         # Navigation header
 │       └── TaskListNumbers.jsx # Task count display
 ├── context/
-│   └── AuthProvider.jsx       # Authentication context
+│   └── AuthProvider.jsx       # Authentication & Firestore context
 ├── utils/
-│   └── LocalStorage.jsx       # Local storage utilities
+│   └── firebase.js            # Firebase initialization and config
 ├── App.jsx                    # Main application component
 └── main.jsx                   # Application entry point
 ```
@@ -165,6 +181,11 @@ src/
 - **Tailwind CSS 3.4.17** - Utility-first CSS framework
 - **PostCSS 8.5.6** - CSS processing tool
 
+### Backend & Database
+- **Firebase 11.3.1** - Backend-as-a-service platform
+- **Cloud Firestore** - NoSQL cloud database for real-time task sync
+- **Firebase Authentication** - Secure user identity management
+
 ### Development Tools
 - **ESLint 9.25.0** - Code linting and formatting
 - **TypeScript Support** - Type definitions for React
@@ -172,8 +193,8 @@ src/
 
 ### Key Features
 - **Component-based Architecture** - Modular and maintainable code
-- **Context API** - State management for authentication
-- **Local Storage** - Persistent data storage
+- **Context API** - State management for authentication and live data
+- **Real-time Synchronization** - Firestore listeners for instant updates
 - **Responsive Design** - Mobile-first approach
 
 ---
